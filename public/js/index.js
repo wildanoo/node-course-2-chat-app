@@ -10,12 +10,19 @@ socket.on('disconnect',function () {
 
 socket.on('newMessage',function(message){
 	console.log('newMessage', message);
+	var li = jQuery('<li></li>');
+	li.text(`${message.from}: ${message.text}`);
+
+	jQuery('#messages').append(li);
 });
 
-socket.on('joinApp',function(message){
-	console.log('Welcome message: ', message.text)
-});
+jQuery('#message-form').on('submit', function(e){
+	e.preventDefault();
 
-socket.on('newUser',function(message){
-	console.log('Notification: ',message.text);
+	socket.emit('createMessage',{
+		from: 'User',
+		text: jQuery('[name=message]').val()
+	},function(){
+
+	});
 });
